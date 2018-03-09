@@ -25,14 +25,15 @@ class RelationEntityGrapher:
         self.create_graph()
         print("KG constructed")
 
-    def create_graph(self):
+    def create_graph(self, delimiter=' '):
         with open(self.triple_store) as triple_file_raw:
-            triple_file = csv.reader(triple_file_raw, delimiter='\t')
+            triple_file = csv.reader(triple_file_raw, delimiter=delimiter)
             for line in triple_file:
-                e1 = self.entity_vocab[line[0]]
-                r = self.relation_vocab[line[1]]
-                e2 = self.entity_vocab[line[2]]
-                self.store[e1].append((r, e2))
+                if line:
+                    e1 = self.entity_vocab[line[0].decode('utf-8')]
+                    r = self.relation_vocab[line[1].decode('utf-8')]
+                    e2 = self.entity_vocab[line[2].decode('utf-8')]
+                    self.store[e1].append((r, e2))
 
         for e1 in self.store:
             num_actions = 1

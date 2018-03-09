@@ -27,12 +27,12 @@ class RelationEntityBatcher():
             yield self.yield_next_batch_test()
 
 
-    def create_triple_store(self, input_file):
+    def create_triple_store(self, input_file, delimiter=' '):
         self.store_all_correct = defaultdict(set)
         self.store = []
         if self.mode == 'train':
             with open(input_file) as raw_input_file:
-                csv_file = csv.reader(raw_input_file, delimiter = '\t' )
+                csv_file = csv.reader(raw_input_file, delimiter=delimiter)
                 for line in csv_file:
                     e1 = self.entity_vocab[line[0]]
                     r = self.relation_vocab[line[1]]
@@ -42,7 +42,7 @@ class RelationEntityBatcher():
             self.store = np.array(self.store)
         else:
             with open(input_file) as raw_input_file:
-                csv_file = csv.reader(raw_input_file, delimiter = '\t' )
+                csv_file = csv.reader(raw_input_file, delimiter=delimiter)
                 for line in csv_file:
                     e1 = line[0]
                     r = line[1]
@@ -61,16 +61,17 @@ class RelationEntityBatcher():
             for f in fact_files:
             # for f in ['graph.txt']:
                 with open(self.input_dir+'/'+f) as raw_input_file:
-                    csv_file = csv.reader(raw_input_file, delimiter='\t')
+                    csv_file = csv.reader(raw_input_file, delimiter=delimiter)
                     for line in csv_file:
-                        e1 = line[0]
-                        r = line[1]
-                        e2 = line[2]
-                        if e1 in self.entity_vocab and e2 in self.entity_vocab:
-                            e1 = self.entity_vocab[e1]
-                            r = self.relation_vocab[r]
-                            e2 = self.entity_vocab[e2]
-                            self.store_all_correct[(e1, r)].add(e2)
+                        if line:
+                            e1 = line[0]
+                            r = line[1]
+                            e2 = line[2]
+                            if e1 in self.entity_vocab and e2 in self.entity_vocab:
+                                e1 = self.entity_vocab[e1]
+                                r = self.relation_vocab[r]
+                                e2 = self.entity_vocab[e2]
+                                self.store_all_correct[(e1, r)].add(e2)
 
 
     def yield_next_batch_train(self):
