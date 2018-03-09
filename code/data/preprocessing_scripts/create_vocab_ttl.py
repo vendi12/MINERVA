@@ -32,7 +32,7 @@ relation_vocab['UNK'] = len(relation_vocab)
 entity_counter = len(entity_vocab)
 relation_counter = len(relation_vocab)
 
-for f in ['train.txt', 'dev.txt', 'test.txt', 'graph.ttl']:
+for f in ['train.txt', 'dev.txt', 'test.txt', 'graph.txt']:
     with open(dir+f) as raw_file:
         csv_file = csv.reader(raw_file, delimiter=' ')
         for line in csv_file:
